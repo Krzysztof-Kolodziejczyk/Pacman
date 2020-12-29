@@ -6,13 +6,15 @@ import java.awt.event.ActionListener;
 
 public class Board extends JPanel implements ActionListener {
 
-    private final Maze maze;
+    public final Maze maze;
     private Dimension dimension;
     public final int cellSize = 30;
     public int boardSizeX, boardSizeY;
     private Game game;
     private Pacman pacman;
     private Timer timer;
+    public Food food;
+    public int score;
 
     public Board()
     {
@@ -23,13 +25,14 @@ public class Board extends JPanel implements ActionListener {
         game = listener.game;
         pacman = game.pacman;
         setFocusable(true);
-
+        food = new Food(this);
     }
 
     private void initVariables() {
         boardSizeX = cellSize * maze.width;
         boardSizeY = cellSize * maze.height;
         dimension = new Dimension(boardSizeX, boardSizeY);
+        score = 0;
         timer = new Timer(40, this);
         timer.start();
     }
@@ -131,9 +134,20 @@ public class Board extends JPanel implements ActionListener {
         repaint();
     }
 
-    public boolean canMoveTo(int x, int y)
+    public boolean canMoveTo(Vector2d position1, Vector2d position2)
     {
-        System.out.println(y + " " + x + " value: " + maze.mazeMap[y][x]);
-        return maze.mazeMap[y][x] <= 0;
+        Vector2d cords1 = mapCords(position1);
+        Vector2d cords2 = mapCords(position2);
+
+        return maze.mazeMap[cords1.y][cords1.x] <= 0 && maze.mazeMap[cords2.y][cords2.x] <= 0;
+    }
+
+    private Vector2d mapCords(Vector2d vector2d)
+    {
+        int x,y;
+        x = vector2d.x / cellSize;
+        y = vector2d.y / cellSize;
+
+        return new Vector2d(x,y);
     }
 }
