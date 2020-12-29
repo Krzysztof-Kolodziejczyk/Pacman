@@ -1,0 +1,47 @@
+-1 - space
+0 - food
+1 - top border
+2 - right border
+4 - bottom border
+8 - left border
+16 - base rectangle
+
+
+----------------------------------
+* one wall *
+----------------------------------
+top block - 17
+right block - 18
+bottom block - 20
+left block - 24
+
+
+
+
+----------------------------------
+* two walls *
+----------------------------------
+top right block - 19
+top bottom block - 21
+top left block - 25
+right bottom block - 22
+right left block - 26
+bottom left block - 28
+
+
+
+
+----------------------------------
+* three walls *
+----------------------------------
+top right bottom block - 23
+top right left block - 27
+top bottom left block - 29
+right bottom left block- 30
+
+
+
+----------------------------------
+* four walls *
+----------------------------------
+top right bottom left block - 31
