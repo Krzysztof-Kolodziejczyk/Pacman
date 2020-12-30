@@ -10,7 +10,7 @@ public class Pacman {
     private final Image down;
     private final Image left;
     private Image currentImage;
-    private final Board mapBoard;
+    public final Board mapBoard;
     private final Vector2d pacmanRealPositionTopLeft;
     private final Vector2d pacmanRealPositionTopRight;
     private final Vector2d pacmanRealPositionBottomLeft;
@@ -103,10 +103,21 @@ public class Pacman {
                     if(mapBoard.canMoveTo(new Vector2d(pacmanRealPositionTopRight.x + 2 + pacmanSpeed, pacmanRealPositionTopRight.y),
                             new Vector2d(pacmanRealPositionBottomRight.x + 2 + pacmanSpeed, pacmanRealPositionTopRight.y)))
                     {
-                        pacmanRealPositionTopLeft.x += pacmanSpeed;
-                        pacmanRealPositionTopRight.x += pacmanSpeed;
-                        pacmanRealPositionBottomLeft.x += pacmanSpeed;
-                        pacmanRealPositionBottomRight.x += pacmanSpeed;
+                        Vector2d mapCords = mapCords(new Vector2d(pacmanRealPositionTopLeft.x - 2 - pacmanSpeed, pacmanRealPositionTopLeft.y));
+                        if(mapCords.x > 21)
+                        {
+                            pacmanRealPositionTopLeft.x = 0;
+                            pacmanRealPositionTopRight.x = 22;
+                            pacmanRealPositionBottomLeft.x = 0;
+                            pacmanRealPositionBottomRight.x = 22;
+                        }
+                        else
+                        {
+                            pacmanRealPositionTopLeft.x += pacmanSpeed;
+                            pacmanRealPositionTopRight.x += pacmanSpeed;
+                            pacmanRealPositionBottomLeft.x += pacmanSpeed;
+                            pacmanRealPositionBottomRight.x += pacmanSpeed;
+                        }
                     }
                     break;
                 case DOWN:
@@ -123,10 +134,21 @@ public class Pacman {
                     if(mapBoard.canMoveTo(new Vector2d(pacmanRealPositionTopLeft.x - 2 - pacmanSpeed, pacmanRealPositionTopLeft.y),
                             new Vector2d(pacmanRealPositionBottomLeft.x - 2 - pacmanSpeed, pacmanRealPositionTopLeft.y)))
                     {
-                        pacmanRealPositionTopLeft.x -= pacmanSpeed;
-                        pacmanRealPositionTopRight.x -= pacmanSpeed;
-                        pacmanRealPositionBottomLeft.x -= pacmanSpeed;
-                        pacmanRealPositionBottomRight.x -= pacmanSpeed;
+                        Vector2d mapCords = mapCords(new Vector2d(pacmanRealPositionTopLeft.x - 2 - pacmanSpeed, pacmanRealPositionTopLeft.y));
+                        if(mapCords.x < 0)
+                        {
+                            pacmanRealPositionTopLeft.x = mapBoard.boardSizeX-22;
+                            pacmanRealPositionTopRight.x = mapBoard.boardSizeX;
+                            pacmanRealPositionBottomLeft.x = mapBoard.boardSizeX-22;
+                            pacmanRealPositionBottomRight.x = mapBoard.boardSizeX;
+                        }
+                        else
+                        {
+                            pacmanRealPositionTopLeft.x -= pacmanSpeed;
+                            pacmanRealPositionTopRight.x -= pacmanSpeed;
+                            pacmanRealPositionBottomLeft.x -= pacmanSpeed;
+                            pacmanRealPositionBottomRight.x -= pacmanSpeed;
+                        }
                     }
                     break;
             }
@@ -139,6 +161,7 @@ public class Pacman {
         if(eatenFoodPos != null)
         {
             mapBoard.maze.mazeMap[eatenFoodPos.y][eatenFoodPos.x] = -1;
+            mapBoard.score += 1;
         }
 
         graphics2D.drawImage(currentImage, pacmanRealPositionTopLeft.x, pacmanRealPositionTopLeft.y, mapBoard);
@@ -158,7 +181,7 @@ public class Pacman {
     }
 
 
-    private Vector2d mapCords(Vector2d vector2d)
+    public Vector2d mapCords(Vector2d vector2d)
     {
         int x,y;
         x = vector2d.x / mapBoard.cellSize;
@@ -167,7 +190,7 @@ public class Pacman {
         return new Vector2d(x,y);
     }
 
-    private Vector2d getCenterOfPacman()
+    public Vector2d getCenterOfPacman()
     {
         return new Vector2d((pacmanRealPositionTopRight.x + pacmanRealPositionBottomRight.x)/2, (pacmanRealPositionTopRight.y + pacmanRealPositionBottomLeft.y)/2);
     }

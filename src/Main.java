@@ -18,7 +18,7 @@ public class Main extends JFrame {
         Main pacman = new Main();
         pacman.setVisible(true);
         pacman.setTitle("Pacman");
-        pacman.setSize(pacman.width, pacman.height+40);
+        pacman.setSize(pacman.width, pacman.height+60);
         pacman.setDefaultCloseOperation(EXIT_ON_CLOSE);
         pacman.setLocationRelativeTo(null);
     }

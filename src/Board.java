@@ -10,8 +10,8 @@ public class Board extends JPanel implements ActionListener {
     private Dimension dimension;
     public final int cellSize = 30;
     public int boardSizeX, boardSizeY;
-    private Game game;
-    private Pacman pacman;
+    private final Game game;
+    private final Pacman pacman;
     private Timer timer;
     public Food food;
     public int score;
@@ -29,12 +29,13 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void initVariables() {
+        score = 0;
         boardSizeX = cellSize * maze.width;
         boardSizeY = cellSize * maze.height;
         dimension = new Dimension(boardSizeX, boardSizeY);
-        score = 0;
         timer = new Timer(40, this);
         timer.start();
+
     }
 
     public void paintComponent(Graphics graphics) {
@@ -46,16 +47,17 @@ public class Board extends JPanel implements ActionListener {
         graphics2D.fillRect(0, 0, dimension.width, dimension.height+40);
 
         drawMaze(graphics2D);
-        drawStartLabel(graphics2D);
+        drawScore(graphics2D);
 
         if(game.gameIsRunning)
         {
             pacman.move();
             pacman.draw(graphics2D);
+            game.drawGhosts(graphics2D);
         }
         else
         {
-            // TODO
+            drawStartLabel(graphics2D);
         }
 
 
@@ -68,6 +70,18 @@ public class Board extends JPanel implements ActionListener {
         String startLabel = "click ENTER to start the game";
         graphics2D.setColor(Color.red);
         graphics2D.drawString(startLabel, boardSizeX/2 - 100, boardSizeY/2);
+    }
+
+    private void drawScore(Graphics2D graphics2D)
+    {
+        Integer i = score;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Score ");
+        stringBuilder.append(i);
+
+        graphics2D.setColor(Color.yellow);
+        graphics2D.drawString(String.valueOf(stringBuilder), 10, boardSizeY+30);
+
     }
 
     private void drawMaze(Graphics2D graphics2D) {
@@ -139,7 +153,12 @@ public class Board extends JPanel implements ActionListener {
         Vector2d cords1 = mapCords(position1);
         Vector2d cords2 = mapCords(position2);
 
+        if(cords1.x < 0 || cords2.x < 0 || cords1.x >=  21 || cords2.y >= 21)
+        {
+            return true;
+        }
         return maze.mazeMap[cords1.y][cords1.x] <= 0 && maze.mazeMap[cords2.y][cords2.x] <= 0;
+
     }
 
     private Vector2d mapCords(Vector2d vector2d)
