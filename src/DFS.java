@@ -19,7 +19,7 @@ public class DFS {
             for(int j=0; j<mapBoard.maze.mazeMap[0].length; j++)
             {
                 int value;
-                if(mapBoard.maze.mazeMap[i][j] <= 0 && j != 0 && j<20)
+                if(mapBoard.maze.mazeMap[i][j] <= 0 && mapBoard.maze.mazeMap[i][j] > -2 && j != 0 && j < 20)
                 {
                     freeCells.add(new Vector2d(j,i));
                     value = 1;
@@ -40,6 +40,9 @@ public class DFS {
             int tmp_current_x = current_x;
             int tmp_current_y = current_y;
             Vector2d parent = map[current_y][current_x].parent;
+
+            if(parent == null)
+                return null;
             current_x = parent.x;
             current_y = parent.y;
             if(current_x == start_x && current_y == start_y)

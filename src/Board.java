@@ -110,7 +110,7 @@ public class Board extends JPanel implements ActionListener {
             for(int x=0; x<boardSizeX; x+= cellSize)
             {
 
-                if(maze.mazeMap[i][j] != -1)
+                if(maze.mazeMap[i][j] != -1 && maze.mazeMap[i][j] != -2)
                 {
                     graphics2D.setColor(Color.CYAN);
                     if((maze.mazeMap[i][j] & 1) != 0)

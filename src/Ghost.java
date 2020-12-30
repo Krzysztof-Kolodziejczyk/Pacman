@@ -48,7 +48,15 @@ public class Ghost {
             position.y = realPosition.y / cellSize;
             if(isActive)
             {
-                target = pacman.mapCords(pacman.getCenterOfPacman());
+                if(target.equals(pacman.mapCords(pacman.getCenterOfPacman())))
+                {
+                    target = getNewTarget();
+                    isActive = false;
+                }
+                else
+                {
+                    target = pacman.mapCords(pacman.getCenterOfPacman());
+                }
             }
             else
             {
@@ -82,7 +90,6 @@ public class Ghost {
     {
         Random random = new Random();
         Vector2d target = dfs.freeCells.get(random.nextInt(dfs.freeCells.size()));
-        System.out.println(target.toString());
         return target;
     }
 
