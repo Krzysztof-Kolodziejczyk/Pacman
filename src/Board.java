@@ -15,6 +15,8 @@ public class Board extends JPanel implements ActionListener {
     private Timer timer;
     public Food food;
     public int score;
+    private Image heartImage;
+    private Image appleImage;
 
     public Board()
     {
@@ -29,6 +31,10 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void initVariables() {
+
+        heartImage = new ImageIcon("/Users/user/IdeaProjects/MyPacMan/resources/images/heart.png").getImage();
+        appleImage = new ImageIcon("/Users/user/IdeaProjects/MyPacMan/resources/images/apple.png").getImage();
+
         score = 0;
         boardSizeX = cellSize * maze.width;
         boardSizeY = cellSize * maze.height;
@@ -48,12 +54,21 @@ public class Board extends JPanel implements ActionListener {
 
         drawMaze(graphics2D);
         drawScore(graphics2D);
+        drawHearts(graphics2D);
 
         if(game.gameIsRunning)
         {
-            pacman.move();
-            pacman.draw(graphics2D);
-            game.drawGhosts(graphics2D);
+            if(game.isPacmanGhostMeet())
+            {
+                game.newGame();
+            }
+            else
+            {
+                pacman.move();
+                pacman.draw(graphics2D);
+                game.drawGhosts(graphics2D);
+            }
+
         }
         else
         {
@@ -71,6 +86,16 @@ public class Board extends JPanel implements ActionListener {
         graphics2D.setColor(Color.red);
         graphics2D.drawString(startLabel, boardSizeX/2 - 100, boardSizeY/2);
     }
+
+
+    private void drawHearts(Graphics2D graphics2D)
+    {
+        for(int i=0; i<game.pacman.lives; i++)
+        {
+            graphics2D.drawImage(heartImage, 80 + i*30, boardSizeY + 10, this);
+        }
+    }
+
 
     private void drawScore(Graphics2D graphics2D)
     {
@@ -110,7 +135,7 @@ public class Board extends JPanel implements ActionListener {
             for(int x=0; x<boardSizeX; x+= cellSize)
             {
 
-                if(maze.mazeMap[i][j] != -1 && maze.mazeMap[i][j] != -2)
+                if(maze.mazeMap[i][j] >= 0)
                 {
                     graphics2D.setColor(Color.CYAN);
                     if((maze.mazeMap[i][j] & 1) != 0)
@@ -134,6 +159,10 @@ public class Board extends JPanel implements ActionListener {
                         graphics2D.setColor(Color.white);
                         graphics2D.fillOval(x + cellSize/2 - 3 , y + cellSize/2 - 3, 6, 6);
                     }
+                }
+                if(maze.mazeMap[i][j] == -3)
+                {
+                    graphics2D.drawImage(appleImage, x + 7 ,y + 7,this);
                 }
 
                 j++;

@@ -1,7 +1,4 @@
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class Game {
@@ -9,23 +6,27 @@ public class Game {
     public Pacman pacman;
     private final Board mapBoard;
     public Ghost[] ghosts;
-
+    private final int startNumberOfGhosts;
     public Game(Board board, int startNumberOfGhosts)
     {
+        this.startNumberOfGhosts = startNumberOfGhosts;
         gameIsRunning = false;
         mapBoard = board;
-        pacman = new Pacman(mapBoard);
+        pacman = new Pacman(mapBoard,this);
 
-        ghosts = new Ghost[startNumberOfGhosts];
-        Vector2d[] possibleStartGhostPosition = {new Vector2d(9,9), new Vector2d(10,9), new Vector2d(11,9)};
-
-        Random random = new Random();
-        for(int i=0; i<startNumberOfGhosts; i++) {
-            Vector2d newPosition = possibleStartGhostPosition[random.nextInt(3)];
-            ghosts[i] = new Ghost(newPosition, pacman);
-        }
+        initGhosts();
 
     }
+
+    private void initGhosts()
+    {
+        ghosts = new Ghost[startNumberOfGhosts];
+        for(int i=0; i<startNumberOfGhosts; i++) {
+            ghosts[i] = new Ghost(pacman);
+        }
+    }
+
+
 
     public void startGame()
     {
@@ -42,9 +43,36 @@ public class Game {
         for (Ghost ghost: ghosts)
         {
             ghost.move();
-            graphics2D.drawImage(ghost.ghostImage, ghost.realPosition.x + 4, ghost.realPosition.y + 4, mapBoard);
+            graphics2D.drawImage(ghost.ghostImage, ghost.realPosition.x - 11, ghost.realPosition.y - 11, mapBoard);
         }
-
     }
+
+    public boolean isPacmanGhostMeet()
+    {
+        for(Ghost ghost: ghosts)
+        {
+            if(ghost.pacmanGhostCollision())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void newGame()
+    {
+        gameIsRunning = false;
+        initGhosts();
+        pacman.initPacmanPosition();
+    }
+
+    public void makeGhostsEscaping()
+    {
+        for(Ghost ghost: ghosts)
+        {
+            ghost.switchToEscapeMode();
+        }
+    }
+
 
 }

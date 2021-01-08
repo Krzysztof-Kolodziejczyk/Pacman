@@ -11,24 +11,38 @@ public class Pacman {
     private final Image left;
     private Image currentImage;
     public final Board mapBoard;
-    private final Vector2d pacmanRealPositionTopLeft;
-    private final Vector2d pacmanRealPositionTopRight;
-    private final Vector2d pacmanRealPositionBottomLeft;
-    private final Vector2d pacmanRealPositionBottomRight;
+    private Vector2d pacmanRealPositionTopLeft;
+    private Vector2d pacmanRealPositionTopRight;
+    private Vector2d pacmanRealPositionBottomLeft;
+    private Vector2d pacmanRealPositionBottomRight;
+    public int lives;
+    private final int cellSize;
+    private final Game game;
 
-    public Pacman(Board board)
+
+    public Pacman(Board board, Game game)
     {
+        this.game = game;
+        cellSize = board.cellSize;
+        lives = 3;
         pacmanDirection = null;
-        pacmanSpeed = 3;
+        pacmanSpeed = 2;
         down = new ImageIcon("/Users/user/IdeaProjects/MyPacMan/resources/images/down.gif").getImage();
         up = new ImageIcon("/Users/user/IdeaProjects/MyPacMan/resources/images/up.gif").getImage();
         right = new ImageIcon("/Users/user/IdeaProjects/MyPacMan/resources/images/right.gif").getImage();
         left = new ImageIcon("/Users/user/IdeaProjects/MyPacMan/resources/images/left.gif").getImage();
 
-        currentImage = right;
-
         mapBoard = board;
-        int cellSize = board.cellSize;
+
+        initPacmanPosition();
+
+    }
+
+    public void initPacmanPosition()
+    {
+        pacmanDirection = null;
+
+        currentImage = right;
 
         int pacmanPositionX = 10;
         int pacmanPositionY = 15;
@@ -37,9 +51,8 @@ public class Pacman {
         pacmanRealPositionTopRight = new Vector2d(pacmanPositionX *cellSize + 26, pacmanPositionY * cellSize + 4);
         pacmanRealPositionBottomLeft = new Vector2d(pacmanPositionX *cellSize + 4, pacmanPositionY * cellSize + 26);
         pacmanRealPositionBottomRight = new Vector2d(pacmanPositionX *cellSize + 26, pacmanPositionY * cellSize + 26);
-
-
     }
+
 
     public void turnPacman(MapDirection newDirection)
     {
@@ -101,7 +114,7 @@ public class Pacman {
 
                 case RIGHT:
                     if(mapBoard.canMoveTo(new Vector2d(pacmanRealPositionTopRight.x + 2 + pacmanSpeed, pacmanRealPositionTopRight.y),
-                            new Vector2d(pacmanRealPositionBottomRight.x + 2 + pacmanSpeed, pacmanRealPositionTopRight.y)))
+                            new Vector2d(pacmanRealPositionBottomRight.x + 2 + pacmanSpeed, pacmanRealPositionBottomRight.y)))
                     {
                         Vector2d mapCords = mapCords(new Vector2d(pacmanRealPositionTopLeft.x - 2 - pacmanSpeed, pacmanRealPositionTopLeft.y));
                         if(mapCords.x > 21)
@@ -132,7 +145,7 @@ public class Pacman {
                     break;
                 case LEFT:
                     if(mapBoard.canMoveTo(new Vector2d(pacmanRealPositionTopLeft.x - 2 - pacmanSpeed, pacmanRealPositionTopLeft.y),
-                            new Vector2d(pacmanRealPositionBottomLeft.x - 2 - pacmanSpeed, pacmanRealPositionTopLeft.y)))
+                            new Vector2d(pacmanRealPositionBottomLeft.x - 2 - pacmanSpeed, pacmanRealPositionBottomLeft.y)))
                     {
                         Vector2d mapCords = mapCords(new Vector2d(pacmanRealPositionTopLeft.x - 2 - pacmanSpeed, pacmanRealPositionTopLeft.y));
                         if(mapCords.x < 0)
@@ -176,6 +189,16 @@ public class Pacman {
         {
             mapBoard.food.foods.remove(eatenFoodPos);
             return eatenFoodPos;
+        }
+
+        if(pos.x >=0 && pos.x < 20 && pos.y >=0 && pos.y < 20)
+        {
+            if(mapBoard.maze.mazeMap[pos.y][pos.x] == -3)
+            {
+                mapBoard.maze.mazeMap[pos.y][pos.x] = -1;
+                mapBoard.score += 10;
+                game.makeGhostsEscaping();
+            }
         }
         return null;
     }

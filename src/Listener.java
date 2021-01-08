@@ -7,7 +7,7 @@ public class Listener extends KeyAdapter {
 
     public Listener(Board board)
     {
-        int startNumberOfGhosts = 6;
+        int startNumberOfGhosts = 4;
         game = new Game(board, startNumberOfGhosts);
     }
 

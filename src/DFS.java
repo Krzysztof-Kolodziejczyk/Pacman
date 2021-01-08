@@ -10,18 +10,29 @@ public class DFS {
         freeCells = new ArrayList<>();
         map = new DFSCell[mapBoard.maze.mazeMap.length][mapBoard.maze.mazeMap[0].length];
         this.mapBoard = mapBoard;
+
+        for(int i=0; i<mapBoard.maze.mazeMap.length; i++)
+        {
+            for(int j=0; j<mapBoard.maze.mazeMap[0].length; j++)
+            {
+                if(mapBoard.maze.mazeMap[i][j] <= 0 && mapBoard.maze.mazeMap[i][j] > -2 && j > 0 && j < 20)
+                {
+                    freeCells.add(new Vector2d(j,i));
+                }
+            }
+        }
+
     }
 
-    public MapDirection DFSFiner(int start_x, int start_y, int search_x, int search_y)
+    public MapDirection DFSFinder(int start_x, int start_y, int search_x, int search_y)
     {
         for(int i=0; i<mapBoard.maze.mazeMap.length; i++)
         {
             for(int j=0; j<mapBoard.maze.mazeMap[0].length; j++)
             {
                 int value;
-                if(mapBoard.maze.mazeMap[i][j] <= 0 && mapBoard.maze.mazeMap[i][j] > -2 && j != 0 && j < 20)
+                if(mapBoard.maze.mazeMap[i][j] <= 0 && mapBoard.maze.mazeMap[i][j] > -2 && j > 0 && j < 20)
                 {
-                    freeCells.add(new Vector2d(j,i));
                     value = 1;
                 }
                 else value = 0;
