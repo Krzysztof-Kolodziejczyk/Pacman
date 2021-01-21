@@ -1,3 +1,5 @@
+package classes;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
@@ -14,7 +16,7 @@ public class Ghost {
     private final int cellSize;
     private MapDirection ghostDirection;
     private int ghostSpeed = 1;
-    private final DFS dfs;
+    private final ShortestPathFinder shortestPathFinder;
     private final Pacman pacman;
     public boolean chaseModeOn;
     public boolean escapeModeOn;
@@ -36,7 +38,7 @@ public class Ghost {
         chaseModeOn = true;
         escapeModeOn = false;
 
-        dfs = new DFS(pacman.mapBoard);
+        shortestPathFinder = new ShortestPathFinder(pacman.mapBoard);
         Vector2d pacmanPosition = pacman.mapCords(pacman.getCenterOfPacman());
         this.pacman = pacman;
         chaseGhostImageTurkus = new ImageIcon("/Users/user/IdeaProjects/MyPacMan/resources/images/turkusGhost.gif").getImage();
@@ -55,7 +57,7 @@ public class Ghost {
         isActive = false;
 
         target = getNewTarget();
-        ghostDirection = dfs.DFSFinder(position.x, position.y, target.x, target.y);
+        ghostDirection = shortestPathFinder.pathFinder(position.x, position.y, target.x, target.y);
 
 
         if(random.nextInt(6)%2 == 0)
@@ -185,7 +187,7 @@ public class Ghost {
 
             if(!flag)
             {
-                ghostDirection = dfs.DFSFinder(position.x, position.y, target.x, target.y);
+                ghostDirection = shortestPathFinder.pathFinder(position.x, position.y, target.x, target.y);
             }
 
         }
@@ -223,7 +225,7 @@ public class Ghost {
     private Vector2d getNewTarget()
     {
         Random random = new Random();
-        Vector2d target = dfs.freeCells.get(random.nextInt(dfs.freeCells.size()));
+        Vector2d target = shortestPathFinder.freeCells.get(random.nextInt(shortestPathFinder.freeCells.size()));
         return target;
     }
 
@@ -267,7 +269,7 @@ public class Ghost {
                 this.position = getNewGhostStartPosition();
                 this.realPosition = new Vector2d(position.x*cellSize + 15, position.y*cellSize + 15);
                 target = getNewTarget();
-                ghostDirection = dfs.DFSFinder(position.x, position.y, target.x, target.y);
+                ghostDirection = shortestPathFinder.pathFinder(position.x, position.y, target.x, target.y);
                 return false;
             }
         }

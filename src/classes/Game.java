@@ -1,5 +1,6 @@
+package classes;
+
 import java.awt.*;
-import java.util.Random;
 
 public class Game {
     public boolean gameIsRunning;
@@ -7,15 +8,17 @@ public class Game {
     private final Board mapBoard;
     public Ghost[] ghosts;
     private final int startNumberOfGhosts;
+    public boolean gameOver;
+
     public Game(Board board, int startNumberOfGhosts)
     {
         this.startNumberOfGhosts = startNumberOfGhosts;
         gameIsRunning = false;
         mapBoard = board;
         pacman = new Pacman(mapBoard,this);
+        gameOver = false;
 
         initGhosts();
-
     }
 
     private void initGhosts()
@@ -72,6 +75,16 @@ public class Game {
         {
             ghost.switchToEscapeMode();
         }
+    }
+
+    public void reloadGame()
+    {
+        mapBoard.score = 0;
+        mapBoard.maze = new Maze();
+        mapBoard.food = new Food(mapBoard);
+        gameIsRunning = true;
+        pacman.lives = 3;
+        gameOver = false;
     }
 
 

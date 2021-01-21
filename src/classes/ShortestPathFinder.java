@@ -1,14 +1,16 @@
+package classes;
+
 import java.util.ArrayList;
 
-public class DFS {
-    public DFSCell[][] map;
+public class ShortestPathFinder {
+    public MapCell[][] map;
     private final Board mapBoard;
     public ArrayList<Vector2d> freeCells;
 
-    public DFS(Board mapBoard)
+    public ShortestPathFinder(Board mapBoard)
     {
         freeCells = new ArrayList<>();
-        map = new DFSCell[mapBoard.maze.mazeMap.length][mapBoard.maze.mazeMap[0].length];
+        map = new MapCell[mapBoard.maze.mazeMap.length][mapBoard.maze.mazeMap[0].length];
         this.mapBoard = mapBoard;
 
         for(int i=0; i<mapBoard.maze.mazeMap.length; i++)
@@ -24,7 +26,7 @@ public class DFS {
 
     }
 
-    public MapDirection DFSFinder(int start_x, int start_y, int search_x, int search_y)
+    public MapDirection pathFinder(int start_x, int start_y, int search_x, int search_y)
     {
         for(int i=0; i<mapBoard.maze.mazeMap.length; i++)
         {
@@ -37,7 +39,7 @@ public class DFS {
                 }
                 else value = 0;
 
-                map[i][j] = new DFSCell(value);
+                map[i][j] = new MapCell(value);
             }
         }
 

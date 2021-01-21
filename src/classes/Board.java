@@ -1,3 +1,4 @@
+package classes;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,7 +7,7 @@ import java.awt.event.ActionListener;
 
 public class Board extends JPanel implements ActionListener {
 
-    public final Maze maze;
+    public Maze maze;
     private Dimension dimension;
     public final int cellSize = 30;
     public int boardSizeX, boardSizeY;
@@ -17,6 +18,7 @@ public class Board extends JPanel implements ActionListener {
     public int score;
     private Image heartImage;
     private Image appleImage;
+    private boolean playerWon;
 
     public Board()
     {
@@ -28,6 +30,7 @@ public class Board extends JPanel implements ActionListener {
         pacman = game.pacman;
         setFocusable(true);
         food = new Food(this);
+        playerWon = false;
     }
 
     private void initVariables() {
@@ -43,6 +46,7 @@ public class Board extends JPanel implements ActionListener {
         timer.start();
 
     }
+
 
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -69,15 +73,63 @@ public class Board extends JPanel implements ActionListener {
                 game.drawGhosts(graphics2D);
             }
 
+            if(food.foods.isEmpty())
+            {
+                game.gameOver = true;
+                playerWon = true;
+            }
+            if(game.pacman.lives == 0)
+            {
+                game.gameOver = true;
+                playerWon = false;
+            }
+
         }
-        else
+        else if(!game.gameOver)
         {
             drawStartLabel(graphics2D);
+        }
+
+        
+        if(!game.gameIsRunning && game.gameOver)
+        {
+            if(playerWon)
+            {
+                drawWinnerLabel(graphics2D);
+            }
+            else
+            {
+                drawLoserLabel(graphics2D);
+            }
         }
 
 
         Toolkit.getDefaultToolkit().sync();
         graphics2D.dispose();
+    }
+
+
+    private void drawWinnerLabel(Graphics2D graphics2D)
+    {
+        String wonLabel = "You Win";
+        graphics2D.setColor(Color.yellow);
+        graphics2D.drawString(wonLabel, boardSizeX/2 - 100, boardSizeY/2);
+        wonLabel = "Your Score " + score + "!";
+        graphics2D.drawString(wonLabel, boardSizeX/2 - 100, boardSizeY/2 + 20);
+        wonLabel =  "CLick enter to restart the game";
+        graphics2D.drawString(wonLabel, boardSizeX/2 - 100, boardSizeY/2 + 40);
+
+    }
+
+    private void drawLoserLabel(Graphics2D graphics2D)
+    {
+        String loseLabel = "You Lose";
+        graphics2D.setColor(Color.yellow);
+        graphics2D.drawString(loseLabel, boardSizeX/2 - 100 + 70, boardSizeY/2 - 5);
+        loseLabel = "Your Score " + score + "!";
+        graphics2D.drawString(loseLabel, boardSizeX/2 - 100 + 55, boardSizeY/2 +10);
+        loseLabel =  "CLick enter to restart the game";
+        graphics2D.drawString(loseLabel, boardSizeX/2 - 100, boardSizeY/2 + 30);
     }
 
     private void drawStartLabel(Graphics2D graphics2D) {

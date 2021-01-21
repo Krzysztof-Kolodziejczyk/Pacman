@@ -1,10 +1,11 @@
+package classes;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Listener extends KeyAdapter {
 
     public final Game game;
-
     public Listener(Board board)
     {
         int startNumberOfGhosts = 4;
@@ -41,9 +42,19 @@ public class Listener extends KeyAdapter {
         }
         else
         {
-            if (key == KeyEvent.VK_ENTER) {
-                game.startGame();
+            if (key == KeyEvent.VK_ENTER)
+            {
+                if(!game.gameOver)
+                {
+                    game.startGame();
+                }
+                else
+                {
+                    game.reloadGame();
+                }
+
             }
+
         }
     }
 
