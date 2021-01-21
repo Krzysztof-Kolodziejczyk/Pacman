@@ -1,5 +1,6 @@
 package classes;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
@@ -225,8 +226,7 @@ public class Ghost {
     private Vector2d getNewTarget()
     {
         Random random = new Random();
-        Vector2d target = shortestPathFinder.freeCells.get(random.nextInt(shortestPathFinder.freeCells.size()));
-        return target;
+        return shortestPathFinder.freeCells.get(random.nextInt(shortestPathFinder.freeCells.size()));
     }
 
     private int distance(Vector2d a, Vector2d b)

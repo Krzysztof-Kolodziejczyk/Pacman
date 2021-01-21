@@ -2,7 +2,6 @@ package classes;
 
 public class MapCell {
     public int value;
-    public MapDirection direction;
     public boolean visited;
     public Vector2d parent;
     public int cost;

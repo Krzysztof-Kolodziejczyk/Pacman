@@ -13,7 +13,6 @@ public class Board extends JPanel implements ActionListener {
     public int boardSizeX, boardSizeY;
     private final Game game;
     private final Pacman pacman;
-    private Timer timer;
     public Food food;
     public int score;
     private Image heartImage;
@@ -42,7 +41,7 @@ public class Board extends JPanel implements ActionListener {
         boardSizeX = cellSize * maze.width;
         boardSizeY = cellSize * maze.height;
         dimension = new Dimension(boardSizeX, boardSizeY);
-        timer = new Timer(40, this);
+        Timer timer = new Timer(40, this);
         timer.start();
 
     }
@@ -72,12 +71,6 @@ public class Board extends JPanel implements ActionListener {
                 pacman.draw(graphics2D);
                 game.drawGhosts(graphics2D);
             }
-
-            if(food.foods.isEmpty())
-            {
-                game.gameOver = true;
-                playerWon = true;
-            }
             if(game.pacman.lives == 0)
             {
                 game.gameOver = true;
@@ -90,7 +83,14 @@ public class Board extends JPanel implements ActionListener {
             drawStartLabel(graphics2D);
         }
 
-        
+        if(food.foods.size() == 0)
+        {
+            game.gameOver = true;
+            playerWon = true;
+            game.gameIsRunning = false;
+        }
+
+
         if(!game.gameIsRunning && game.gameOver)
         {
             if(playerWon)
@@ -113,11 +113,11 @@ public class Board extends JPanel implements ActionListener {
     {
         String wonLabel = "You Win";
         graphics2D.setColor(Color.yellow);
-        graphics2D.drawString(wonLabel, boardSizeX/2 - 100, boardSizeY/2);
+        graphics2D.drawString(wonLabel, boardSizeX/2 - 30, boardSizeY/2 - 5);
         wonLabel = "Your Score " + score + "!";
-        graphics2D.drawString(wonLabel, boardSizeX/2 - 100, boardSizeY/2 + 20);
+        graphics2D.drawString(wonLabel, boardSizeX/2 - 45, boardSizeY/2 +10);
         wonLabel =  "CLick enter to restart the game";
-        graphics2D.drawString(wonLabel, boardSizeX/2 - 100, boardSizeY/2 + 40);
+        graphics2D.drawString(wonLabel, boardSizeX/2 - 100, boardSizeY/2 + 30);
 
     }
 
@@ -125,9 +125,9 @@ public class Board extends JPanel implements ActionListener {
     {
         String loseLabel = "You Lose";
         graphics2D.setColor(Color.yellow);
-        graphics2D.drawString(loseLabel, boardSizeX/2 - 100 + 70, boardSizeY/2 - 5);
+        graphics2D.drawString(loseLabel, boardSizeX/2 - 30, boardSizeY/2 - 5);
         loseLabel = "Your Score " + score + "!";
-        graphics2D.drawString(loseLabel, boardSizeX/2 - 100 + 55, boardSizeY/2 +10);
+        graphics2D.drawString(loseLabel, boardSizeX/2 - 45, boardSizeY/2 +10);
         loseLabel =  "CLick enter to restart the game";
         graphics2D.drawString(loseLabel, boardSizeX/2 - 100, boardSizeY/2 + 30);
     }
@@ -151,13 +151,12 @@ public class Board extends JPanel implements ActionListener {
 
     private void drawScore(Graphics2D graphics2D)
     {
-        Integer i = score;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Score ");
-        stringBuilder.append(i);
+        int i = score;
 
         graphics2D.setColor(Color.yellow);
-        graphics2D.drawString(String.valueOf(stringBuilder), 10, boardSizeY+30);
+        String stringBuilder = "Score " +
+                i;
+        graphics2D.drawString(stringBuilder, 10, boardSizeY+30);
 
     }
 

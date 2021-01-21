@@ -79,6 +79,7 @@ public class Game {
 
     public void reloadGame()
     {
+        newGame();
         mapBoard.score = 0;
         mapBoard.maze = new Maze();
         mapBoard.food = new Food(mapBoard);
